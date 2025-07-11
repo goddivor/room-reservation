@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 import RootLayout from "@/app.layout";
 import NotFound from "./notFound";
 import StarterPage from "./StarterPage";
+import { authRoutes } from "@/lib/routes/auth.routes";
 
 
 const router = createBrowserRouter([
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
         path: "/",
         element: <StarterPage />,
       },
+      authRoutes,
       { path: "*", element: <NotFound /> },
     ],
   },
