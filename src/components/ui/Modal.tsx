@@ -1,8 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // src/components/ui/Modal.tsx
-import React, { forwardRef, useImperativeHandle, useState, useEffect } from 'react';
-import { CloseSquare } from 'iconsax-react';
-import Button from './Button';
+import React, {
+  forwardRef,
+  useImperativeHandle,
+  useState,
+  useEffect,
+} from "react";
+import { CloseSquare } from "iconsax-react";
+import Button from "../Button";
+// import Button from './Button';
 
 export interface ModalRef {
   open: () => void;
@@ -13,7 +19,7 @@ export interface ModalRef {
 interface ModalProps {
   title?: string;
   children: React.ReactNode;
-  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+  size?: "sm" | "md" | "lg" | "xl" | "full";
   onClose?: () => void;
   closeOnOverlayClick?: boolean;
   closeOnEsc?: boolean;
@@ -28,14 +34,14 @@ const Modal = forwardRef<ModalRef, ModalProps>(
     {
       title,
       children,
-      size = 'md',
+      size = "md",
       onClose,
       closeOnOverlayClick = true,
       closeOnEsc = true,
       showCloseButton = true,
       footer,
-      className = '',
-      overlayClassName = '',
+      className = "",
+      overlayClassName = "",
     },
     ref
   ) => {
@@ -53,25 +59,25 @@ const Modal = forwardRef<ModalRef, ModalProps>(
       if (!closeOnEsc || !isOpen) return;
 
       const handleEsc = (event: KeyboardEvent) => {
-        if (event.key === 'Escape') {
+        if (event.key === "Escape") {
           handleClose();
         }
       };
 
-      document.addEventListener('keydown', handleEsc);
-      return () => document.removeEventListener('keydown', handleEsc);
+      document.addEventListener("keydown", handleEsc);
+      return () => document.removeEventListener("keydown", handleEsc);
     }, [closeOnEsc, isOpen]);
 
     // Prevent body scroll when modal is open
     useEffect(() => {
       if (isOpen) {
-        document.body.style.overflow = 'hidden';
+        document.body.style.overflow = "hidden";
       } else {
-        document.body.style.overflow = '';
+        document.body.style.overflow = "";
       }
 
       return () => {
-        document.body.style.overflow = '';
+        document.body.style.overflow = "";
       };
     }, [isOpen]);
 
@@ -87,11 +93,11 @@ const Modal = forwardRef<ModalRef, ModalProps>(
     };
 
     const sizeClasses = {
-      sm: 'max-w-md',
-      md: 'max-w-lg',
-      lg: 'max-w-2xl',
-      xl: 'max-w-4xl',
-      full: 'max-w-7xl mx-4',
+      sm: "max-w-md",
+      md: "max-w-lg",
+      lg: "max-w-2xl",
+      xl: "max-w-4xl",
+      full: "max-w-7xl mx-4",
     };
 
     if (!isOpen) return null;
@@ -122,11 +128,9 @@ const Modal = forwardRef<ModalRef, ModalProps>(
                     {title}
                   </h2>
                 )}
-                
+
                 {showCloseButton && (
                   <Button
-                    variant="ghost"
-                    size="sm"
                     onClick={handleClose}
                     className="p-2 hover:bg-gray-100"
                     aria-label="Fermer"
@@ -138,9 +142,7 @@ const Modal = forwardRef<ModalRef, ModalProps>(
             )}
 
             {/* Content */}
-            <div className="max-h-[70vh] overflow-y-auto">
-              {children}
-            </div>
+            <div className="max-h-[70vh] overflow-y-auto">{children}</div>
 
             {/* Footer */}
             {footer && (
@@ -155,7 +157,7 @@ const Modal = forwardRef<ModalRef, ModalProps>(
   }
 );
 
-Modal.displayName = 'Modal';
+Modal.displayName = "Modal";
 
 export { Modal };
 export default Modal;
