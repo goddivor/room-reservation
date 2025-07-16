@@ -51,7 +51,7 @@ interface RoomFilters {
   amenities: string[];
 }
 
-const RoomsListPage: React.FC = () => {
+const RoomsManagement: React.FC = () => {
   const [rooms, setRooms] = useState<Room[]>([
     {
       id: "1",
@@ -703,4 +703,4 @@ const RoomsListPage: React.FC = () => {
   );
 };
 
-export default RoomsListPage;
+export default RoomsManagement;
