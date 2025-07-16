@@ -3,6 +3,7 @@ import RootLayout from "@/app.layout";
 import NotFound from "./notFound";
 import StarterPage from "./StarterPage";
 import { authRoutes } from "@/lib/routes/auth.routes";
+import RoomsListPage from "./rooms/rooms-list";
 
 
 const router = createBrowserRouter([
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
         element: <StarterPage />,
       },
       authRoutes,
+      {
+        path: "/rooms",
+        element: <RoomsListPage />,
+      },
       { path: "*", element: <NotFound /> },
     ],
   },

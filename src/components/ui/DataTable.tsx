@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // src/components/ui/DataTable.tsx
-import React, { useState, useMemo } from 'react';
-import { 
-  ArrowUp2, 
-  ArrowDown2, 
-  SearchNormal1, 
+import React, { useState, useMemo } from "react";
+import {
+  ArrowUp2,
+  ArrowDown2,
+  SearchNormal1,
   DocumentDownload,
-  Refresh
-} from 'iconsax-react';
-import Button from './Button';
-import Input from './Input';
+  Refresh,
+} from "iconsax-react";
+import Button from "../Button";
+import { Input } from "../Input";
 
 export interface Column<T = any> {
   key: string;
@@ -18,8 +18,8 @@ export interface Column<T = any> {
   render?: (value: any, record: T, index: number) => React.ReactNode;
   sortable?: boolean;
   width?: string | number;
-  align?: 'left' | 'center' | 'right';
-  fixed?: 'left' | 'right';
+  align?: "left" | "center" | "right";
+  fixed?: "left" | "right";
   className?: string;
 }
 
@@ -43,17 +43,20 @@ export interface DataTableProps<T = any> {
   showExport?: boolean;
   onExport?: () => void;
   rowKey?: keyof T | ((record: T) => string | number);
-  onRow?: (record: T, index: number) => {
+  onRow?: (
+    record: T,
+    index: number
+  ) => {
     onClick?: () => void;
     onDoubleClick?: () => void;
     className?: string;
   };
   emptyText?: string;
   className?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
 }
 
-type SortOrder = 'asc' | 'desc' | null;
+type SortOrder = "asc" | "desc" | null;
 
 interface SortState {
   key: string | null;
@@ -66,19 +69,19 @@ const DataTable = <T extends Record<string, any>>({
   loading = false,
   pagination,
   searchable = false,
-  searchPlaceholder = 'Rechercher...',
+  searchPlaceholder = "Rechercher...",
   onSearch,
   showRefresh = false,
   onRefresh,
   showExport = false,
   onExport,
-  rowKey = 'id',
+  rowKey = "id",
   onRow,
-  emptyText = 'Aucune donnée disponible',
-  className = '',
-  size = 'md',
+  emptyText = "Aucune donnée disponible",
+  className = "",
+  size = "md",
 }: DataTableProps<T>) => {
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = useState("");
   const [sortState, setSortState] = useState<SortState>({
     key: null,
     order: null,
@@ -86,20 +89,20 @@ const DataTable = <T extends Record<string, any>>({
 
   // Size classes
   const sizeClasses = {
-    sm: 'text-xs',
-    md: 'text-sm', 
-    lg: 'text-base',
+    sm: "text-xs",
+    md: "text-sm",
+    lg: "text-base",
   };
 
   const cellPadding = {
-    sm: 'px-3 py-2',
-    md: 'px-4 py-3',
-    lg: 'px-6 py-4',
+    sm: "px-3 py-2",
+    md: "px-4 py-3",
+    lg: "px-6 py-4",
   };
 
   // Get row key
   const getRowKey = (record: T, index: number): string | number => {
-    if (typeof rowKey === 'function') {
+    if (typeof rowKey === "function") {
       return rowKey(record);
     }
     return record[rowKey] || index;
@@ -113,12 +116,17 @@ const DataTable = <T extends Record<string, any>>({
 
   // Handle sort
   const handleSort = (columnKey: string) => {
-    const column = columns.find(col => col.key === columnKey);
+    const column = columns.find((col) => col.key === columnKey);
     if (!column?.sortable) return;
 
-    let newOrder: SortOrder = 'asc';
+    let newOrder: SortOrder = "asc";
     if (sortState.key === columnKey) {
-      newOrder = sortState.order === 'asc' ? 'desc' : sortState.order === 'desc' ? null : 'asc';
+      newOrder =
+        sortState.order === "asc"
+          ? "desc"
+          : sortState.order === "desc"
+          ? null
+          : "asc";
     }
 
     setSortState({
@@ -131,7 +139,7 @@ const DataTable = <T extends Record<string, any>>({
   const sortedData = useMemo(() => {
     if (!sortState.key || !sortState.order) return data;
 
-    const column = columns.find(col => col.key === sortState.key);
+    const column = columns.find((col) => col.key === sortState.key);
     if (!column) return data;
 
     return [...data].sort((a, b) => {
@@ -139,9 +147,9 @@ const DataTable = <T extends Record<string, any>>({
       const bVal = column.dataIndex ? b[column.dataIndex] : b[sortState.key!];
 
       if (aVal === bVal) return 0;
-      
+
       const comparison = aVal > bVal ? 1 : -1;
-      return sortState.order === 'asc' ? comparison : -comparison;
+      return sortState.order === "asc" ? comparison : -comparison;
     });
   }, [data, sortState, columns]);
 
@@ -162,10 +170,10 @@ const DataTable = <T extends Record<string, any>>({
     if (!column.sortable) return null;
 
     const isActive = sortState.key === column.key;
-    const iconColor = isActive ? '#3B82F6' : '#9CA3AF';
-    const iconSize = size === 'sm' ? 14 : 16;
+    const iconColor = isActive ? "#3B82F6" : "#9CA3AF";
+    const iconSize = size === "sm" ? 14 : 16;
 
-    if (isActive && sortState.order === 'desc') {
+    if (isActive && sortState.order === "desc") {
       return <ArrowDown2 size={iconSize} color={iconColor} />;
     }
     return <ArrowUp2 size={iconSize} color={iconColor} />;
@@ -178,38 +186,33 @@ const DataTable = <T extends Record<string, any>>({
         <div className="p-4 border-b border-gray-200 flex items-center justify-between gap-4">
           <div className="flex-1">
             {searchable && (
-              <Input
-                placeholder={searchPlaceholder}
-                value={searchValue}
-                onChange={(e) => handleSearch(e.target.value)}
-                leftIcon={<SearchNormal1 size={16} color="#9CA3AF" />}
-                className="max-w-xs"
-              />
+              <div className="flex items-center">
+                <SearchNormal1 size={16} color="#9CA3AF" />
+                <Input
+                  placeholder={searchPlaceholder}
+                  value={searchValue}
+                  onChange={(e) => handleSearch(e.target.value)}
+                  className="max-w-xs"
+                />
+              </div>
             )}
           </div>
-          
+
           <div className="flex items-center gap-2">
             {showRefresh && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={onRefresh}
-                disabled={loading}
-                leftIcon={<Refresh size={16} color="#6B7280" />}
-              >
-                Actualiser
-              </Button>
+              <div className="flex items-center">
+                <Refresh size={16} color="#6B7280" className="mr-2" />
+                <Button onClick={onRefresh} disabled={loading}>
+                  Actualiser
+                </Button>
+              </div>
             )}
-            
+
             {showExport && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={onExport}
-                leftIcon={<DocumentDownload size={16} color="#6B7280" />}
-              >
-                Exporter
-              </Button>
+              <div className="flex items-center">
+                <DocumentDownload size={16} color="#6B7280" />
+                <Button onClick={onExport}>Exporter</Button>
+              </div>
             )}
           </div>
         </div>
@@ -225,10 +228,10 @@ const DataTable = <T extends Record<string, any>>({
                   key={column.key}
                   className={`
                     ${cellPadding[size]} font-medium text-gray-900 text-left
-                    ${column.sortable ? 'cursor-pointer hover:bg-gray-100' : ''}
-                    ${column.align === 'center' ? 'text-center' : ''}
-                    ${column.align === 'right' ? 'text-right' : ''}
-                    ${column.className || ''}
+                    ${column.sortable ? "cursor-pointer hover:bg-gray-100" : ""}
+                    ${column.align === "center" ? "text-center" : ""}
+                    ${column.align === "right" ? "text-right" : ""}
+                    ${column.className || ""}
                   `}
                   style={{ width: column.width }}
                   onClick={() => column.sortable && handleSort(column.key)}
@@ -241,11 +244,14 @@ const DataTable = <T extends Record<string, any>>({
               ))}
             </tr>
           </thead>
-          
+
           <tbody className="divide-y divide-gray-200">
             {loading ? (
               <tr>
-                <td colSpan={columns.length} className={`${cellPadding[size]} text-center`}>
+                <td
+                  colSpan={columns.length}
+                  className={`${cellPadding[size]} text-center`}
+                >
                   <div className="flex items-center justify-center gap-2 py-8">
                     <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
                     <span className="text-gray-500">Chargement...</span>
@@ -254,7 +260,10 @@ const DataTable = <T extends Record<string, any>>({
               </tr>
             ) : sortedData.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className={`${cellPadding[size]} text-center text-gray-500 py-8`}>
+                <td
+                  colSpan={columns.length}
+                  className={`${cellPadding[size]} text-center text-gray-500 py-8`}
+                >
                   {emptyText}
                 </td>
               </tr>
@@ -264,7 +273,9 @@ const DataTable = <T extends Record<string, any>>({
                 return (
                   <tr
                     key={getRowKey(record, index)}
-                    className={`hover:bg-gray-50 transition-colors ${rowProps.className || ''}`}
+                    className={`hover:bg-gray-50 transition-colors ${
+                      rowProps.className || ""
+                    }`}
                     onClick={rowProps.onClick}
                     onDoubleClick={rowProps.onDoubleClick}
                   >
@@ -273,9 +284,9 @@ const DataTable = <T extends Record<string, any>>({
                         key={column.key}
                         className={`
                           ${cellPadding[size]} text-gray-900
-                          ${column.align === 'center' ? 'text-center' : ''}
-                          ${column.align === 'right' ? 'text-right' : ''}
-                          ${column.className || ''}
+                          ${column.align === "center" ? "text-center" : ""}
+                          ${column.align === "right" ? "text-right" : ""}
+                          ${column.className || ""}
                         `}
                         style={{ width: column.width }}
                       >
@@ -294,30 +305,43 @@ const DataTable = <T extends Record<string, any>>({
       {pagination && (
         <div className="p-4 border-t border-gray-200 flex items-center justify-between">
           <div className="text-sm text-gray-700">
-            Affichage de {((pagination.current - 1) * pagination.pageSize) + 1} à{' '}
-            {Math.min(pagination.current * pagination.pageSize, pagination.total)} sur{' '}
-            {pagination.total} éléments
+            Affichage de {(pagination.current - 1) * pagination.pageSize + 1} à{" "}
+            {Math.min(
+              pagination.current * pagination.pageSize,
+              pagination.total
+            )}{" "}
+            sur {pagination.total} éléments
           </div>
-          
+
           <div className="flex items-center gap-2">
             <Button
-              variant="outline"
-              size="sm"
               disabled={pagination.current <= 1}
-              onClick={() => pagination.onChange?.(pagination.current - 1, pagination.pageSize)}
+              onClick={() =>
+                pagination.onChange?.(
+                  pagination.current - 1,
+                  pagination.pageSize
+                )
+              }
             >
               Précédent
             </Button>
-            
+
             <span className="px-3 py-1 text-sm">
-              Page {pagination.current} sur {Math.ceil(pagination.total / pagination.pageSize)}
+              Page {pagination.current} sur{" "}
+              {Math.ceil(pagination.total / pagination.pageSize)}
             </span>
-            
+
             <Button
-              variant="outline"
-              size="sm"
-              disabled={pagination.current >= Math.ceil(pagination.total / pagination.pageSize)}
-              onClick={() => pagination.onChange?.(pagination.current + 1, pagination.pageSize)}
+              disabled={
+                pagination.current >=
+                Math.ceil(pagination.total / pagination.pageSize)
+              }
+              onClick={() =>
+                pagination.onChange?.(
+                  pagination.current + 1,
+                  pagination.pageSize
+                )
+              }
             >
               Suivant
             </Button>
