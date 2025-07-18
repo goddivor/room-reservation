@@ -160,7 +160,7 @@ const AdminLayout: React.FC = () => {
             {/* Mobile Sidebar Overlay */}
             {sidebarOpen && (
                 <div className="lg:hidden fixed inset-0 z-50 flex">
-                    <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setSidebarOpen(false)} />
+                    <div className="fixed inset-0 backdrop-blur-sm bg-opacity-50" onClick={() => setSidebarOpen(false)} />
                     
                     <div className="relative flex flex-col w-64 bg-white shadow-xl">
                         {/* Mobile Sidebar Header */}
