@@ -12,6 +12,7 @@ import {
     Setting2,
     Logout,
     ArrowDown2,
+    Setting4,
 } from 'iconsax-react';
 
 interface SidebarItem {
@@ -47,6 +48,13 @@ const AdminLayout: React.FC = () => {
             icon: <Buildings2 color="#1D4ED8" size={20} />,
             description: 'Rooms & equipment'
         },
+        {
+            path: '/admin/room-config',
+            label: 'Room Configuration',
+            icon: <Setting4 color="#1D4ED8" size={20} />,
+            description: 'Types, locations & equipment'
+        },
+
         {
             path: '/admin/users',
             label: 'User Management',
