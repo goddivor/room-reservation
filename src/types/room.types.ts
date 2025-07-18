@@ -1,226 +1,115 @@
-import type { Equipment } from "./equipment.types";
-import type { RecurrencePattern } from "./reservation.types";
-import type { UserRole } from "./user.types";
-
 // src/types/room.types.ts
-export type RoomType = 'meeting' | 'conference' | 'training' | 'office' | 'coworking' | 'presentation' | 'phone_booth';
-export type RoomStatus = 'available' | 'occupied' | 'maintenance' | 'reserved' | 'out_of_service';
-export type RoomCapacityType = 'small' | 'medium' | 'large' | 'extra_large';
+export type RoomType = 'studio' | 'simple' | 'salon' | '2_bedrooms_salon' | '3_bedrooms_salon';
+export type RoomStatus = 'available' | 'reserved' | 'occupied' | 'maintenance' | 'inactive';
+export type RoomFloor = 'ground' | 'first' | 'second' | 'third' | 'fourth' | 'fifth';
 
-// Base Room Interface
-export interface Room {
+// Room Type Configuration
+export interface RoomTypeConfig {
   id: string;
   name: string;
-  code: string; // Room identifier like "A-101"
-  type: RoomType;
-  description?: string;
-  capacity: number;
-  capacityType: RoomCapacityType;
-  floor: Floor;
-  building: Building;
-  area: number; // in square meters
-  status: RoomStatus;
-  amenities: RoomAmenity[];
-  equipment: Equipment[];
-  images: string[];
-  isAccessible: boolean; // wheelchair accessible
-  hasWindows: boolean;
-  hasProjector: boolean;
-  hasWhiteboard: boolean;
-  hasVideoConference: boolean;
-  hourlyRate?: number; // for billing if applicable
-  bookingPolicy: BookingPolicy;
-  availability: RoomAvailability;
-  maintenanceSchedule: MaintenanceSchedule[];
+  description: string;
+  color: string;
+  icon: string;
   createdAt: string;
   updatedAt: string;
 }
 
-// Building Information
-export interface Building {
+// Equipment
+export interface Equipment {
   id: string;
   name: string;
-  address: string;
-  city: string;
-  postalCode: string;
-  country: string;
-  totalFloors: number;
-  hasElevator: boolean;
-  hasParking: boolean;
-  securityLevel: 'low' | 'medium' | 'high';
-  accessHours: OperatingHours;
-}
-
-// Floor Information
-export interface Floor {
-  id: string;
-  buildingId: string;
-  floorNumber: number;
-  name: string; // "Ground Floor", "1st Floor", etc.
-  totalRooms: number;
-  layout?: string; // URL to floor plan image
-  emergencyExits: string[];
-  restrooms: boolean;
-  kitchenette: boolean;
-  isAccessible: boolean;
-}
-
-// Room Amenities
-export interface RoomAmenity {
-  id: string;
-  name: string;
+  description?: string;
   icon: string;
-  description?: string;
-  isEssential: boolean; // true for basic amenities like chairs, tables
-  category: 'furniture' | 'technology' | 'comfort' | 'accessibility' | 'security';
+  createdAt: string;
+  updatedAt: string;
 }
 
-// Room Availability
-export interface RoomAvailability {
-  monday: DayAvailability;
-  tuesday: DayAvailability;
-  wednesday: DayAvailability;
-  thursday: DayAvailability;
-  friday: DayAvailability;
-  saturday: DayAvailability;
-  sunday: DayAvailability;
-  holidays: HolidaySchedule[];
-  specialDates: SpecialDateSchedule[];
-}
-
-// Day Availability
-export interface DayAvailability {
-  isAvailable: boolean;
-  openTime: string; // "08:00"
-  closeTime: string; // "18:00"
-  breaks: TimeBreak[];
-  bookingSlots: number; // minutes per slot (15, 30, 60)
-}
-
-// Time Break (lunch break, cleaning, etc.)
-export interface TimeBreak {
-  startTime: string;
-  endTime: string;
-  reason: string;
-  isRecurring: boolean;
-}
-
-// Holiday Schedule
-export interface HolidaySchedule {
-  date: string;
-  name: string;
-  isFullDayClosed: boolean;
-  customHours?: {
-    openTime: string;
-    closeTime: string;
-  };
-}
-
-// Special Date Schedule
-export interface SpecialDateSchedule {
-  date: string;
-  reason: string;
-  availability: DayAvailability;
-}
-
-// Operating Hours
-export interface OperatingHours {
-  monday: { open: string; close: string; closed?: boolean };
-  tuesday: { open: string; close: string; closed?: boolean };
-  wednesday: { open: string; close: string; closed?: boolean };
-  thursday: { open: string; close: string; closed?: boolean };
-  friday: { open: string; close: string; closed?: boolean };
-  saturday: { open: string; close: string; closed?: boolean };
-  sunday: { open: string; close: string; closed?: boolean };
-}
-
-// Booking Policy
-export interface BookingPolicy {
-  maxAdvanceBookingDays: number;
-  minBookingDuration: number; // minutes
-  maxBookingDuration: number; // minutes
-  requiresApproval: boolean;
-  approverRoles: UserRole[];
-  cancelationPolicy: CancelationPolicy;
-  noShowPolicy: NoShowPolicy;
-  restrictions: BookingRestriction[];
-}
-
-// Cancelation Policy
-export interface CancelationPolicy {
-  allowCancelation: boolean;
-  maxCancelationHours: number; // hours before meeting
-  penaltyAfterHours?: number;
-  requiresReason: boolean;
-}
-
-// No Show Policy
-export interface NoShowPolicy {
-  trackNoShows: boolean;
-  maxNoShowsPerMonth: number;
-  penaltyAfterNoShows: 'warning' | 'temporary_ban' | 'permanent_ban';
-  banDurationDays?: number;
-}
-
-// Booking Restrictions
-export interface BookingRestriction {
-  type: 'role' | 'department' | 'time' | 'duration' | 'frequency';
-  condition: string;
-  value: string | number;
-  message: string;
-}
-
-// Maintenance Schedule
-export interface MaintenanceSchedule {
+// Main Room Interface
+export interface Room {
   id: string;
-  roomId: string;
-  title: string;
+  code: string; // Room number/code (e.g., "A101", "B205")
+  typeId: string; // Reference to RoomTypeConfig
+  type?: RoomTypeConfig; // Populated type details
+  status: RoomStatus;
+  floor: RoomFloor;
+  capacity: number;
+  area: number; // in square meters
+  equipmentIds: string[]; // Array of equipment IDs
+  equipment?: Equipment[]; // Populated equipment details
+  dailyRate: number; // Daily rental rate
+  monthlyRate?: number; // Optional monthly rate
   description?: string;
-  scheduledDate: string;
-  startTime: string;
-  endTime: string;
-  type: 'routine' | 'repair' | 'upgrade' | 'cleaning';
-  technician?: string;
-  isRecurring: boolean;
-  recurrencePattern?: RecurrencePattern;
-  status: 'scheduled' | 'in_progress' | 'completed' | 'cancelled';
-  cost?: number;
-  notes?: string;
+  images: string[];
+  isActive: boolean;
+  // Location details
+  building?: string;
+  section?: string; // Section of building (A, B, C, etc.)
+  // Features
+  hasBalcony: boolean;
+  hasKitchen: boolean;
+  hasBathroom: boolean;
+  hasAirConditioning: boolean;
+  hasWifi: boolean;
+  // Metadata
+  createdAt: string;
+  updatedAt: string;
+  lastMaintenanceDate?: string;
+  nextMaintenanceDate?: string;
 }
 
 // Room Filters
 export interface RoomFilters {
-  type?: RoomType;
-  status?: RoomStatus;
-  building?: string;
-  floor?: number;
-  capacity?: {
-    min?: number;
-    max?: number;
-  };
-  amenities?: string[];
-  hasProjector?: boolean;
-  hasWhiteboard?: boolean;
-  hasVideoConference?: boolean;
-  isAccessible?: boolean;
   search?: string;
+  typeId?: string;
+  status?: RoomStatus;
+  floor?: RoomFloor;
+  minCapacity?: number;
+  maxCapacity?: number;
+  minRate?: number;
+  maxRate?: number;
+  equipmentIds?: string[];
+  hasBalcony?: boolean;
+  hasKitchen?: boolean;
+  hasBathroom?: boolean;
+  hasAirConditioning?: boolean;
+  hasWifi?: boolean;
+  isActive?: boolean;
+  building?: string;
+  section?: string;
 }
 
 // Room Statistics
 export interface RoomStats {
   totalRooms: number;
   availableRooms: number;
+  reservedRooms: number;
   occupiedRooms: number;
   maintenanceRooms: number;
+  inactiveRooms: number;
   utilizationRate: number; // percentage
-  popularRooms: PopularRoom[];
-  typeDistribution: Record<RoomType, number>;
+  averageRate: number;
+  typeDistribution: Record<string, number>;
+  floorDistribution: Record<RoomFloor, number>;
 }
 
-// Popular Room
-export interface PopularRoom {
-  roomId: string;
-  roomName: string;
-  reservationCount: number;
-  utilizationRate: number;
+// Form Data for Room Creation/Editing
+export interface RoomFormData {
+  code: string;
+  typeId: string;
+  status: RoomStatus;
+  floor: RoomFloor;
+  capacity: number;
+  area: number;
+  equipmentIds: string[];
+  dailyRate: number;
+  monthlyRate?: number;
+  description?: string;
+  building?: string;
+  section?: string;
+  hasBalcony: boolean;
+  hasKitchen: boolean;
+  hasBathroom: boolean;
+  hasAirConditioning: boolean;
+  hasWifi: boolean;
+  isActive: boolean;
 }
