@@ -14,6 +14,7 @@ import {
     ArrowDown2,
     Setting4,
 } from 'iconsax-react';
+import { CalendarCheck } from 'lucide-react';
 
 interface SidebarItem {
     path: string;
@@ -41,6 +42,12 @@ const AdminLayout: React.FC = () => {
             label: 'Administration',
             icon: <Home color="#1D4ED8" size={20} />,
             description: 'Dashboard'
+        },
+        {
+            path: '/admin/reservations',
+            label: 'Reservations',
+            icon: <CalendarCheck color="#1D4ED8" size={20} />,
+            description: 'Manage reservations'
         },
         {
             path: '/admin/rooms',

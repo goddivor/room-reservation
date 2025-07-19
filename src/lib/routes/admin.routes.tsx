@@ -1,5 +1,6 @@
 import AdminLayout from "@/components/layout/AdminLayout";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
+import ReservationsManagement from "@/pages/admin/ReservationsManagement";
 import RoomConfiguration from "@/pages/admin/RoomConfiguration";
 import RoomsManagement from "@/pages/admin/RoomsManagement";
 import UsersManagement from "@/pages/admin/UsersManagement";
@@ -25,6 +26,10 @@ export const adminRoutes: RouteObject = {
     {
       path: "/admin/room-config",
       element: <RoomConfiguration />,
+    },
+    {
+      path: "/admin/reservations",
+      element: <ReservationsManagement />,
     },
   ],
 };
