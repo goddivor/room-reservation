@@ -1,5 +1,5 @@
 // src/components/modals/confirmation-modal.tsx
-import { forwardRef, useImperativeHandle, useState } from "react";
+import { forwardRef, useImperativeHandle, useState, useEffect } from "react";
 import { Trash, Warning2, CloseCircle } from "iconsax-react";
 import Button from "@/components/actions/button";
 import type { ModalRef } from "@/types/modal-ref";
@@ -11,8 +11,12 @@ interface ConfirmationModalProps {
   confirmText?: string;
   cancelText?: string;
   type?: "danger" | "warning" | "info";
+  variant?: "danger" | "warning" | "info"; // alias pour type
+  isOpen?: boolean; // mode contrôlé
+  onClose?: () => void; // mode contrôlé
   onConfirm?: () => void;
   onCancel?: () => void;
+  children?: React.ReactNode;
 }
 
 const ConfirmationModal = forwardRef<ModalRef, ConfirmationModalProps>(
@@ -23,27 +27,43 @@ const ConfirmationModal = forwardRef<ModalRef, ConfirmationModalProps>(
       description,
       confirmText = "Confirmer",
       cancelText = "Annuler",
-      type = "danger",
+      type,
+      variant,
+      isOpen: isOpenProp,
+      onClose,
       onConfirm,
       onCancel,
+      children,
     },
     ref
   ) => {
-    const [isOpen, setIsOpen] = useState(false);
+    // Mode contrôlé ou non contrôlé
+    const [internalOpen, setInternalOpen] = useState(false);
+    const isControlled = typeof isOpenProp === "boolean";
+    const isOpen = isControlled ? isOpenProp : internalOpen;
 
     useImperativeHandle(ref, () => ({
-      open: () => setIsOpen(true),
-      close: () => setIsOpen(false),
+      open: () => setInternalOpen(true),
+      close: () => setInternalOpen(false),
     }));
+
+    // Fermer le modal si onClose est appelé en mode contrôlé
+    useEffect(() => {
+      if (isControlled && !isOpenProp) {
+        setInternalOpen(false);
+      }
+    }, [isControlled, isOpenProp]);
 
     const handleConfirm = () => {
       onConfirm?.();
-      setIsOpen(false);
+      if (!isControlled) setInternalOpen(false);
+      onClose?.();
     };
 
     const handleCancel = () => {
       onCancel?.();
-      setIsOpen(false);
+      if (!isControlled) setInternalOpen(false);
+      onClose?.();
     };
 
     const handleBackdropClick = (e: React.MouseEvent) => {
@@ -55,7 +75,8 @@ const ConfirmationModal = forwardRef<ModalRef, ConfirmationModalProps>(
     if (!isOpen) return null;
 
     const getTypeConfig = () => {
-      switch (type) {
+      const modalType = variant || type || "danger";
+      switch (modalType) {
         case "danger":
           return {
             icon: <Trash size={24} color="#DC2626" variant="Bold" />,
@@ -91,7 +112,7 @@ const ConfirmationModal = forwardRef<ModalRef, ConfirmationModalProps>(
 
     return (
       <div
-        className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50 p-4"
+        className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50 p-4 bg-black"
         onClick={handleBackdropClick}
       >
         <div className="bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 overflow-hidden">
@@ -116,6 +137,8 @@ const ConfirmationModal = forwardRef<ModalRef, ConfirmationModalProps>(
               </p>
             </div>
           )}
+          {/* Children (ex: champ raison d'annulation) */}
+          {children && <div className="px-6 pt-2 pb-0">{children}</div>}
 
           {/* Actions */}
           <div className="p-6 bg-gray-50 flex items-center justify-end space-x-3">

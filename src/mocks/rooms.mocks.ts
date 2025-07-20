@@ -145,6 +145,7 @@ export const mockRooms: Room[] = [
     hasWifi: true,
     createdAt: "2024-01-15T00:00:00Z",
     updatedAt: "2024-07-15T00:00:00Z",
+    name: ""
   },
   {
     id: "room_2",
@@ -171,6 +172,7 @@ export const mockRooms: Room[] = [
     hasWifi: true,
     createdAt: "2024-01-15T00:00:00Z",
     updatedAt: "2024-07-15T00:00:00Z",
+    name: ""
   },
   {
     id: "room_3",
@@ -197,6 +199,7 @@ export const mockRooms: Room[] = [
     hasWifi: true,
     createdAt: "2024-02-01T00:00:00Z",
     updatedAt: "2024-07-15T00:00:00Z",
+    name: ""
   },
   {
     id: "room_4",
@@ -223,6 +226,7 @@ export const mockRooms: Room[] = [
     hasWifi: true,
     createdAt: "2024-02-01T00:00:00Z",
     updatedAt: "2024-07-15T00:00:00Z",
+    name: ""
   },
   {
     id: "room_5",
@@ -251,6 +255,7 @@ export const mockRooms: Room[] = [
     updatedAt: "2024-07-15T00:00:00Z",
     lastMaintenanceDate: "2024-07-10T00:00:00Z",
     nextMaintenanceDate: "2024-07-20T00:00:00Z",
+    name: ""
   },
   {
     id: "room_6",
@@ -277,6 +282,7 @@ export const mockRooms: Room[] = [
     hasWifi: true,
     createdAt: "2024-03-15T00:00:00Z",
     updatedAt: "2024-07-15T00:00:00Z",
+    name: ""
   },
   {
     id: "room_7",
@@ -302,6 +308,7 @@ export const mockRooms: Room[] = [
     hasWifi: false,
     createdAt: "2024-04-01T00:00:00Z",
     updatedAt: "2024-07-15T00:00:00Z",
+    name: ""
   },
 ];
 

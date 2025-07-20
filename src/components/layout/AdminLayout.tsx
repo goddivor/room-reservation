@@ -13,6 +13,7 @@ import {
     Logout,
     ArrowDown2,
     Setting4,
+    Calendar,
 } from 'iconsax-react';
 
 interface SidebarItem {
@@ -41,6 +42,12 @@ const AdminLayout: React.FC = () => {
             label: 'Administration',
             icon: <Home color="#1D4ED8" size={20} />,
             description: 'Dashboard'
+        },
+        {
+            path: '/admin/reservations',
+            label: 'Reservation Management',
+            icon: <Calendar color="#1D4ED8" size={20} />,
+            description: 'Reservations & bookings'
         },
         {
             path: '/admin/rooms',
