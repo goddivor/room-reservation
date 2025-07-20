@@ -93,6 +93,11 @@ const AdminLayout: React.FC = () => {
         setUserDropdownOpen(false);
     };
 
+    const handleSetting = () => {
+        navigate('/admin/settings');
+        setUserDropdownOpen(false);
+    }
+
     return (
         <div className="min-h-screen bg-gray-50 flex">
             {/* Sidebar - Desktop */}
@@ -296,7 +301,7 @@ const AdminLayout: React.FC = () => {
                                             </button>
                                             
                                             <button
-                                                onClick={() => setUserDropdownOpen(false)}
+                                                onClick={handleSetting}
                                                 className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 text-left"
                                             >
                                                 <Setting2 color="#6B7280" size={16} />

@@ -1,6 +1,7 @@
 import AdminLayout from "@/components/layout/AdminLayout";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 import AdminProfile from "@/pages/admin/AdminProfile";
+import AdminSettings from "@/pages/admin/AdminSettings";
 import ReservationsManagement from "@/pages/admin/ReservationsManagement";
 import RoomConfiguration from "@/pages/admin/RoomConfiguration";
 import RoomsManagement from "@/pages/admin/RoomsManagement";
@@ -20,6 +21,10 @@ export const adminRoutes: RouteObject = {
     {
       path: "/admin/profile",
       element: <AdminProfile />,
+    },
+    {
+      path: "/admin/settings",
+      element: <AdminSettings />,
     },
     {
       path: "/admin/users",
