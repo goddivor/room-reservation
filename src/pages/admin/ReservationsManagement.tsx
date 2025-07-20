@@ -1,28 +1,32 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState, useEffect } from 'react';
-import { Calendar, TableDocument, Printer } from 'iconsax-react';
-import { useReservations } from '../../hooks/useReservations';
-import type { Reservation, ReservationFilters } from '../../types/reservation.types';
-import ReservationFiltersComponent from '../../components/reservations/reservation-filters';
-import ReservationTable from '../../components/reservations/reservation-table';
-import ReservationCalendar from '../../components/reservations/reservation-calendar';
-import ReservationDetailsModal from '../../components/reservations/reservation-details-modal';
-import ConfirmationModal from '../../components/modals/confirmation-modal';
-import Button from '../../components/actions/button';
-import SpinLoader from '../../components/SpinLoader';
-import { useToast } from '../../context/toast-context';
-import { Plus } from '@phosphor-icons/react';
-import ReservationOverviewCards from '@/components/reservations/reservation-overview-card';
+import React, { useState, useEffect } from "react";
+import { Calendar, TableDocument, Printer, Add } from "iconsax-react";
+import { useReservations } from "../../hooks/useReservations";
+import type {
+  Reservation,
+  ReservationFilters,
+} from "../../types/reservation.types";
+import ReservationFiltersComponent from "../../components/reservations/reservation-filters";
+import ReservationTable from "../../components/reservations/reservation-table";
+import ReservationCalendar from "../../components/reservations/reservation-calendar";
+import ReservationDetailsModal from "../../components/reservations/reservation-details-modal";
+import ConfirmationModal from "../../components/modals/confirmation-modal";
+import Button from "../../components/actions/button";
+import SpinLoader from "../../components/SpinLoader";
+import { useToast } from "../../context/toast-context";
+import ReservationOverviewCards from "@/components/reservations/reservation-overview-card";
 
-type ViewMode = 'table' | 'calendar';
+type ViewMode = "table" | "calendar";
 
 const ReservationsManagement: React.FC = () => {
-  const [viewMode, setViewMode] = useState<ViewMode>('table');
-  const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
+  const [viewMode, setViewMode] = useState<ViewMode>("table");
+  const [selectedReservation, setSelectedReservation] =
+    useState<Reservation | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
-  const [reservationToCancel, setReservationToCancel] = useState<Reservation | null>(null);
-  const [cancelReason, setCancelReason] = useState('');
+  const [reservationToCancel, setReservationToCancel] =
+    useState<Reservation | null>(null);
+  const [cancelReason, setCancelReason] = useState("");
 
   const {
     reservations,
@@ -33,14 +37,14 @@ const ReservationsManagement: React.FC = () => {
     applyFilters,
     updateReservationStatus,
     cancelReservation,
-    processRefund
+    processRefund,
   } = useReservations();
 
   const { success, info, error: showError } = useToast();
 
   useEffect(() => {
     if (reservationError) {
-      showError('Une erreur est survenue', reservationError);
+      showError("Une erreur est survenue", reservationError);
     }
   }, [reservationError, showError]);
 
@@ -55,16 +59,20 @@ const ReservationsManagement: React.FC = () => {
 
   const handlePrintReservation = (reservation: Reservation) => {
     // Mock PDF generation
-    info(`Génération du PDF pour la réservation #${reservation.id.toUpperCase()}...`);
+    info(
+      `Génération du PDF pour la réservation #${reservation.id.toUpperCase()}...`
+    );
     setTimeout(() => {
-      success(`PDF généré avec succès pour la réservation #${reservation.id.toUpperCase()}`);
-      console.log('Printing reservation:', reservation);
+      success(
+        `PDF généré avec succès pour la réservation #${reservation.id.toUpperCase()}`
+      );
+      console.log("Printing reservation:", reservation);
     }, 1500);
   };
 
   const handleEditReservation = (reservation: Reservation) => {
-    info('La fonctionnalité d\'édition arrive bientôt !');
-    console.log('Edit reservation:', reservation);
+    info("La fonctionnalité d'édition arrive bientôt !");
+    console.log("Edit reservation:", reservation);
   };
 
   const handleCancelReservation = (reservation: Reservation) => {
@@ -75,13 +83,18 @@ const ReservationsManagement: React.FC = () => {
   const confirmCancelReservation = async () => {
     if (!reservationToCancel) return;
     try {
-      await cancelReservation(reservationToCancel.id, cancelReason || 'Annulé par l\'admin');
-      success(`La réservation #${reservationToCancel.id.toUpperCase()} a été annulée`);
+      await cancelReservation(
+        reservationToCancel.id,
+        cancelReason || "Annulé par l'admin"
+      );
+      success(
+        `La réservation #${reservationToCancel.id.toUpperCase()} a été annulée`
+      );
       setShowCancelModal(false);
       setReservationToCancel(null);
-      setCancelReason('');
+      setCancelReason("");
     } catch (err) {
-      showError('Échec de l\'annulation de la réservation');
+      showError("Échec de l'annulation de la réservation");
     }
   };
 
@@ -89,20 +102,27 @@ const ReservationsManagement: React.FC = () => {
     try {
       const refundAmount = reservation.payment.amount * 0.9;
       await processRefund(reservation.id, refundAmount);
-      success(`Remboursement de ${refundAmount.toFixed(2)} effectué avec succès`);
+      success(
+        `Remboursement de ${refundAmount.toFixed(2)} effectué avec succès`
+      );
       setShowDetailsModal(false);
     } catch (err) {
-      showError('Échec du remboursement');
+      showError("Échec du remboursement");
     }
   };
 
-  const handleUpdateStatus = async (reservation: Reservation, status: Reservation['status']) => {
+  const handleUpdateStatus = async (
+    reservation: Reservation,
+    status: Reservation["status"]
+  ) => {
     try {
       await updateReservationStatus(reservation.id, status);
-      success(`Statut de la réservation mis à jour : ${status.replace('_', ' ')}`);
+      success(
+        `Statut de la réservation mis à jour : ${status.replace("_", " ")}`
+      );
       setShowDetailsModal(false);
     } catch (err) {
-      showError('Échec de la mise à jour du statut de la réservation');
+      showError("Échec de la mise à jour du statut de la réservation");
     }
   };
 
@@ -128,7 +148,9 @@ const ReservationsManagement: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Reservations Management</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Reservations Management
+          </h1>
           <p className="text-gray-600 mt-1">
             Manage and track all hotel reservations
           </p>
@@ -138,36 +160,44 @@ const ReservationsManagement: React.FC = () => {
           {/* View Mode Toggle */}
           <div className="flex items-center bg-gray-100 rounded-lg p-1">
             <button
-              onClick={() => setViewMode('table')}
+              onClick={() => setViewMode("table")}
               className={`
                 flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors
-                ${viewMode === 'table'
-                  ? 'bg-white text-gray-900 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
+                ${
+                  viewMode === "table"
+                    ? "bg-white text-gray-900 shadow-sm"
+                    : "text-gray-600 hover:text-gray-900"
                 }
               `}
             >
-              <TableDocument size={16} color={viewMode === 'table' ? '#111827' : '#6B7280'} />
+              <TableDocument
+                size={16}
+                color={viewMode === "table" ? "#111827" : "#6B7280"}
+              />
               Table View
             </button>
             <button
-              onClick={() => setViewMode('calendar')}
+              onClick={() => setViewMode("calendar")}
               className={`
                 flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors
-                ${viewMode === 'calendar'
-                  ? 'bg-white text-gray-900 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
+                ${
+                  viewMode === "calendar"
+                    ? "bg-white text-gray-900 shadow-sm"
+                    : "text-gray-600 hover:text-gray-900"
                 }
               `}
             >
-              <Calendar size={16} color={viewMode === 'calendar' ? '#111827' : '#6B7280'} />
+              <Calendar
+                size={16}
+                color={viewMode === "calendar" ? "#111827" : "#6B7280"}
+              />
               Calendar View
             </button>
           </div>
 
-          <Button className="flex items-center gap-2">
-            <Plus size={16} color="#ffffff" />
-            New Reservation
+          <Button className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg flex items-center space-x-2">
+            <Add size={16} color="#ffffff" />
+            <span>Add Reservation</span>
           </Button>
         </div>
       </div>
@@ -183,7 +213,7 @@ const ReservationsManagement: React.FC = () => {
       />
 
       {/* Content Based on View Mode */}
-      {viewMode === 'table' ? (
+      {viewMode === "table" ? (
         <ReservationTable
           reservations={reservations}
           loading={loading}
@@ -217,14 +247,16 @@ const ReservationsManagement: React.FC = () => {
         onClose={() => {
           setShowCancelModal(false);
           setReservationToCancel(null);
-          setCancelReason('');
+          setCancelReason("");
         }}
         onConfirm={confirmCancelReservation}
         title="Cancel Reservation"
         message={
           reservationToCancel
-            ? `Are you sure you want to cancel reservation #${reservationToCancel.id.toUpperCase()} for ${reservationToCancel.user.firstName} ${reservationToCancel.user.lastName}?`
-            : ''
+            ? `Are you sure you want to cancel reservation #${reservationToCancel.id.toUpperCase()} for ${
+                reservationToCancel.user.firstName
+              } ${reservationToCancel.user.lastName}?`
+            : ""
         }
         confirmText="Cancel Reservation"
         cancelText="Keep Reservation"
@@ -249,15 +281,15 @@ const ReservationsManagement: React.FC = () => {
         <div className="flex flex-col gap-2">
           <Button
             onClick={() => {
-              info('Exportation des réservations en PDF...');
+              info("Exportation des réservations en PDF...");
               setTimeout(() => {
-                success('Réservations exportées avec succès !');
+                success("Réservations exportées avec succès !");
               }, 2000);
             }}
-            className="flex items-center gap-2 shadow-lg"
+            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2"
           >
-            <Printer size={16} color="#6B7280" />
-            Export PDF
+            <Printer size={16} color="#fff" />
+            <span>Export PDF</span>
           </Button>
         </div>
       </div>

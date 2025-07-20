@@ -26,7 +26,6 @@ export interface Equipment {
 
 // Main Room Interface
 export interface Room {
-  name: string;
   id: string;
   code: string; // Room number/code (e.g., "A101", "B205")
   typeId: string; // Reference to RoomTypeConfig

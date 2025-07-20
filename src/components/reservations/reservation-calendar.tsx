@@ -189,13 +189,13 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
                             ${getStatusColor(reservation.status)}
                             ${isPast && (reservation.status === 'checked_out' || reservation.status === 'cancelled') ? 'opacity-50' : ''}
                           `}
-                          title={`${reservation.user.firstName} ${reservation.user.lastName} - ${reservation.room.name}`}
+                          title={`${reservation.user.firstName} ${reservation.user.lastName} - ${reservation.room.code}`}
                         >
-                          <div className="truncate font-medium">
+                          {/* <div className="truncate font-medium">
                             {reservation.user.firstName} {reservation.user.lastName}
-                          </div>
+                          </div> */}
                           <div className="truncate">
-                            {reservation.room.name}
+                            {reservation.room.code}
                           </div>
                         </div>
                       ))}
@@ -267,7 +267,7 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
                           {/* Room Info */}
                           <div className="flex items-center gap-2 mb-2 text-sm">
                             <Home size={14} color="#6B7280" />
-                            <span className="text-gray-700">{reservation.room.name}</span>
+                            <span className="text-gray-700">{reservation.room.code}</span>
                           </div>
 
                           {/* Guests */}

@@ -1,23 +1,23 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { 
-  CloseCircle, 
-  User, 
-  Home, 
-  Calendar, 
-  DollarCircle, 
+import React, { useState, useRef, useEffect } from "react";
+import {
+  CloseCircle,
+  User,
+  Home,
+  Calendar,
+  DollarCircle,
   Clock,
   Edit,
   Printer,
   Trash,
   RefreshCircle,
   Call,
-  Sms
-} from 'iconsax-react';
-import type { Reservation } from '../../types/reservation.types';
-import Modal from '../ui/Modal';
-import type { ModalRef } from '../ui/Modal';
-import Badge from '../badge';
-import Button from '../actions/button';
+  Sms,
+} from "iconsax-react";
+import type { Reservation } from "../../types/reservation.types";
+import Modal from "../ui/Modal";
+import type { ModalRef } from "../ui/Modal";
+import Badge from "../badge";
+import Button from "../actions/button";
 
 interface ReservationDetailsModalProps {
   reservation: Reservation | null;
@@ -27,7 +27,10 @@ interface ReservationDetailsModalProps {
   onPrint: (reservation: Reservation) => void;
   onCancel: (reservation: Reservation) => void;
   onRefund: (reservation: Reservation) => void;
-  onUpdateStatus: (reservation: Reservation, status: Reservation['status']) => void;
+  onUpdateStatus: (
+    reservation: Reservation,
+    status: Reservation["status"]
+  ) => void;
 }
 
 const ReservationDetailsModal: React.FC<ReservationDetailsModalProps> = ({
@@ -38,10 +41,10 @@ const ReservationDetailsModal: React.FC<ReservationDetailsModalProps> = ({
   onPrint,
   onCancel,
   onRefund,
-  onUpdateStatus
+  onUpdateStatus,
 }) => {
   const [showRefundModal, setShowRefundModal] = useState(false);
-  const [refundAmount, setRefundAmount] = useState('');
+  const [refundAmount, setRefundAmount] = useState("");
   const modalRef = useRef<ModalRef>(null);
   const refundModalRef = useRef<ModalRef>(null);
 
@@ -64,52 +67,55 @@ const ReservationDetailsModal: React.FC<ReservationDetailsModalProps> = ({
   if (!reservation) return null;
 
   const formatDate = (date: Date) => {
-    return new Date(date).toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    return new Date(date).toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
   const formatDateTime = (date: Date) => {
-    return new Date(date).toLocaleString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Date(date).toLocaleString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
-  const formatCurrency = (amount: number, currency: string = 'USD') => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: currency
+  const formatCurrency = (amount: number, currency: string = "USD") => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: currency,
     }).format(amount);
   };
 
-  const getStatusBadge = (status: Reservation['status']) => {
+  const getStatusBadge = (status: Reservation["status"]) => {
     const statusConfig = {
-      pending: { variant: 'warning' as const, label: 'Pending' },
-      confirmed: { variant: 'info' as const, label: 'Confirmed' },
-      checked_in: { variant: 'success' as const, label: 'Checked In' },
-      checked_out: { variant: 'secondary' as const, label: 'Checked Out' },
-      cancelled: { variant: 'danger' as const, label: 'Cancelled' },
-      no_show: { variant: 'warning' as const, label: 'No Show' }
+      pending: { variant: "warning" as const, label: "Pending" },
+      confirmed: { variant: "info" as const, label: "Confirmed" },
+      checked_in: { variant: "success" as const, label: "Checked In" },
+      checked_out: { variant: "secondary" as const, label: "Checked Out" },
+      cancelled: { variant: "danger" as const, label: "Cancelled" },
+      no_show: { variant: "warning" as const, label: "No Show" },
     };
 
     const config = statusConfig[status];
     return <Badge variant={config.variant}>{config.label}</Badge>;
   };
 
-  const getPaymentStatusBadge = (status: Reservation['payment']['status']) => {
+  const getPaymentStatusBadge = (status: Reservation["payment"]["status"]) => {
     const statusConfig = {
-      paid: { variant: 'success' as const, label: 'Paid' },
-      pending: { variant: 'warning' as const, label: 'Pending' },
-      failed: { variant: 'danger' as const, label: 'Failed' },
-      refunded: { variant: 'info' as const, label: 'Refunded' },
-      on_site_payment: { variant: 'secondary' as const, label: 'On-site Payment' }
+      paid: { variant: "success" as const, label: "Paid" },
+      pending: { variant: "warning" as const, label: "Pending" },
+      failed: { variant: "danger" as const, label: "Failed" },
+      refunded: { variant: "info" as const, label: "Refunded" },
+      on_site_payment: {
+        variant: "secondary" as const,
+        label: "On-site Payment",
+      },
     };
 
     const config = statusConfig[status];
@@ -119,30 +125,36 @@ const ReservationDetailsModal: React.FC<ReservationDetailsModalProps> = ({
   const isArchived = () => {
     const today = new Date();
     const checkOut = new Date(reservation.checkOutDate);
-    return checkOut < today || reservation.status === 'checked_out' || reservation.status === 'cancelled';
+    return (
+      checkOut < today ||
+      reservation.status === "checked_out" ||
+      reservation.status === "cancelled"
+    );
   };
 
   const canRefund = () => {
-    return reservation.payment.status === 'paid' && 
-           reservation.status !== 'checked_out' && 
-           reservation.status !== 'cancelled';
+    return (
+      reservation.payment.status === "paid" &&
+      reservation.status !== "checked_out" &&
+      reservation.status !== "cancelled"
+    );
   };
 
   const availableStatusUpdates = () => {
     const current = reservation.status;
     const options = [];
 
-    if (current === 'pending') {
-      options.push({ value: 'confirmed', label: 'Confirm Reservation' });
-      options.push({ value: 'cancelled', label: 'Cancel Reservation' });
+    if (current === "pending") {
+      options.push({ value: "confirmed", label: "Confirm Reservation" });
+      options.push({ value: "cancelled", label: "Cancel Reservation" });
     }
-    if (current === 'confirmed') {
-      options.push({ value: 'checked_in', label: 'Check In' });
-      options.push({ value: 'cancelled', label: 'Cancel Reservation' });
-      options.push({ value: 'no_show', label: 'Mark as No Show' });
+    if (current === "confirmed") {
+      options.push({ value: "checked_in", label: "Check In" });
+      options.push({ value: "cancelled", label: "Cancel Reservation" });
+      options.push({ value: "no_show", label: "Mark as No Show" });
     }
-    if (current === 'checked_in') {
-      options.push({ value: 'checked_out', label: 'Check Out' });
+    if (current === "checked_in") {
+      options.push({ value: "checked_out", label: "Check Out" });
     }
 
     return options;
@@ -153,7 +165,7 @@ const ReservationDetailsModal: React.FC<ReservationDetailsModalProps> = ({
     if (amount > 0 && amount <= reservation.payment.amount) {
       onRefund(reservation);
       setShowRefundModal(false);
-      setRefundAmount('');
+      setRefundAmount("");
     }
   };
 
@@ -184,9 +196,11 @@ const ReservationDetailsModal: React.FC<ReservationDetailsModalProps> = ({
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-4">
                   <User size={20} color="#6B7280" />
-                  <h3 className="font-semibold text-gray-900">Guest Information</h3>
+                  <h3 className="font-semibold text-gray-900">
+                    Guest Information
+                  </h3>
                 </div>
-                
+
                 <div className="flex items-center gap-4 mb-4">
                   <img
                     src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${reservation.user.email}`}
@@ -204,7 +218,7 @@ const ReservationDetailsModal: React.FC<ReservationDetailsModalProps> = ({
                       </div>
                       <div className="flex items-center gap-2">
                         <Call size={14} color="#6B7280" />
-                        <span>{reservation.user.phone || 'N/A'}</span>
+                        <span>{reservation.user.phone || "N/A"}</span>
                       </div>
                     </div>
                   </div>
@@ -215,29 +229,37 @@ const ReservationDetailsModal: React.FC<ReservationDetailsModalProps> = ({
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-4">
                   <Home size={20} color="#6B7280" />
-                  <h3 className="font-semibold text-gray-900">Room Information</h3>
+                  <h3 className="font-semibold text-gray-900">
+                    Room Information
+                  </h3>
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-gray-500">Room Name</p>
-                    <p className="font-medium text-gray-900">{reservation.room.name}</p>
+                    <p className="font-medium text-gray-900">
+                      {reservation.room.code}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Room Type</p>
                     <p className="font-medium text-gray-900 capitalize">
-                      {typeof reservation.room.type === 'string'
+                      {typeof reservation.room.type === "string"
                         ? reservation.room.type
-                        : reservation.room.type?.name || 'N/A'}
+                        : reservation.room.type?.name || "N/A"}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Floor</p>
-                    <p className="font-medium text-gray-900">{reservation.room.floor}</p>
+                    <p className="font-medium text-gray-900">
+                      {reservation.room.floor}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Capacity</p>
-                    <p className="font-medium text-gray-900">{reservation.room.capacity} guests</p>
+                    <p className="font-medium text-gray-900">
+                      {reservation.room.capacity} guests
+                    </p>
                   </div>
                 </div>
               </div>
@@ -246,28 +268,36 @@ const ReservationDetailsModal: React.FC<ReservationDetailsModalProps> = ({
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-4">
                   <Calendar size={20} color="#6B7280" />
-                  <h3 className="font-semibold text-gray-900">Stay Information</h3>
+                  <h3 className="font-semibold text-gray-900">
+                    Stay Information
+                  </h3>
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-gray-500">Check-in Date</p>
-                    <p className="font-medium text-gray-900">{formatDate(reservation.checkInDate)}</p>
+                    <p className="font-medium text-gray-900">
+                      {formatDate(reservation.checkInDate)}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Check-out Date</p>
-                    <p className="font-medium text-gray-900">{formatDate(reservation.checkOutDate)}</p>
+                    <p className="font-medium text-gray-900">
+                      {formatDate(reservation.checkOutDate)}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Duration</p>
                     <p className="font-medium text-gray-900">
-                      {reservation.nights} {reservation.nights === 1 ? 'night' : 'nights'}
+                      {reservation.nights}{" "}
+                      {reservation.nights === 1 ? "night" : "nights"}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Guests</p>
                     <p className="font-medium text-gray-900">
-                      {reservation.guests} {reservation.guests === 1 ? 'guest' : 'guests'}
+                      {reservation.guests}{" "}
+                      {reservation.guests === 1 ? "guest" : "guests"}
                     </p>
                   </div>
                 </div>
@@ -275,7 +305,9 @@ const ReservationDetailsModal: React.FC<ReservationDetailsModalProps> = ({
                 {reservation.specialRequests && (
                   <div className="mt-4">
                     <p className="text-sm text-gray-500">Special Requests</p>
-                    <p className="font-medium text-gray-900">{reservation.specialRequests}</p>
+                    <p className="font-medium text-gray-900">
+                      {reservation.specialRequests}
+                    </p>
                   </div>
                 )}
               </div>
@@ -284,20 +316,25 @@ const ReservationDetailsModal: React.FC<ReservationDetailsModalProps> = ({
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-4">
                   <DollarCircle size={20} color="#6B7280" />
-                  <h3 className="font-semibold text-gray-900">Payment Information</h3>
+                  <h3 className="font-semibold text-gray-900">
+                    Payment Information
+                  </h3>
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-gray-500">Total Amount</p>
                     <p className="text-xl font-bold text-gray-900">
-                      {formatCurrency(reservation.payment.amount, reservation.payment.currency)}
+                      {formatCurrency(
+                        reservation.payment.amount,
+                        reservation.payment.currency
+                      )}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Payment Method</p>
                     <p className="font-medium text-gray-900 capitalize">
-                      {reservation.payment.method.replace('_', ' ')}
+                      {reservation.payment.method.replace("_", " ")}
                     </p>
                   </div>
                   <div>
@@ -325,9 +362,13 @@ const ReservationDetailsModal: React.FC<ReservationDetailsModalProps> = ({
 
                 {reservation.payment.refundedAt && (
                   <div className="mt-4 p-3 bg-purple-50 rounded-lg">
-                    <p className="text-sm text-purple-600 font-medium">Refund Information</p>
+                    <p className="text-sm text-purple-600 font-medium">
+                      Refund Information
+                    </p>
                     <p className="text-purple-900">
-                      Refunded {formatCurrency(reservation.payment.refundAmount || 0)} on {formatDateTime(reservation.payment.refundedAt)}
+                      Refunded{" "}
+                      {formatCurrency(reservation.payment.refundAmount || 0)} on{" "}
+                      {formatDateTime(reservation.payment.refundedAt)}
                     </p>
                   </div>
                 )}
@@ -350,51 +391,45 @@ const ReservationDetailsModal: React.FC<ReservationDetailsModalProps> = ({
 
               {/* Quick Actions */}
               <div className="bg-white border border-gray-200 rounded-lg p-4">
-                <h3 className="font-semibold text-gray-900 mb-3">Quick Actions</h3>
+                <h3 className="font-semibold text-gray-900 mb-3">
+                  Quick Actions
+                </h3>
                 <div className="space-y-2">
                   <Button
-                    
-                    
                     onClick={() => onPrint(reservation)}
                     className="w-full justify-start"
                   >
                     <Printer size={16} color="#6B7280" />
-                    Print PDF
+                    <span>Print PDF</span>
                   </Button>
 
                   {!isArchived() && (
                     <>
                       <Button
-                        
-                        
                         onClick={() => onEdit(reservation)}
                         className="w-full justify-start"
                       >
                         <Edit size={16} color="#6B7280" />
-                        Edit Reservation
+                        <span>Edit Reservation</span>
                       </Button>
 
                       {canRefund() && (
                         <Button
-                          
-                          
                           onClick={() => setShowRefundModal(true)}
                           className="w-full justify-start text-purple-600 border-purple-300 hover:bg-purple-50"
                         >
                           <RefreshCircle size={16} color="#7C3AED" />
-                          Process Refund
+                          <span>Process Refund</span>
                         </Button>
                       )}
 
-                      {reservation.status !== 'cancelled' && (
+                      {reservation.status !== "cancelled" && (
                         <Button
-                          
-                          
                           onClick={() => onCancel(reservation)}
                           className="w-full justify-start text-red-600 border-red-300 hover:bg-red-50"
                         >
                           <Trash size={16} color="#DC2626" />
-                          Cancel Reservation
+                          <span>Cancel Reservation</span>
                         </Button>
                       )}
                     </>
@@ -405,14 +440,19 @@ const ReservationDetailsModal: React.FC<ReservationDetailsModalProps> = ({
               {/* Status Updates */}
               {availableStatusUpdates().length > 0 && (
                 <div className="bg-white border border-gray-200 rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-900 mb-3">Update Status</h3>
+                  <h3 className="font-semibold text-gray-900 mb-3">
+                    Update Status
+                  </h3>
                   <div className="space-y-2">
                     {availableStatusUpdates().map((option) => (
                       <Button
                         key={option.value}
-                        
-                        
-                        onClick={() => onUpdateStatus(reservation, option.value as Reservation['status'])}
+                        onClick={() =>
+                          onUpdateStatus(
+                            reservation,
+                            option.value as Reservation["status"]
+                          )
+                        }
                         className="w-full justify-start"
                       >
                         {option.label}
@@ -427,16 +467,19 @@ const ReservationDetailsModal: React.FC<ReservationDetailsModalProps> = ({
                 <h4 className="font-medium text-gray-900 mb-2">Timestamps</h4>
                 <div className="space-y-2 text-gray-600">
                   <div>
-                    <span className="text-gray-500">Created:</span><br />
+                    <span className="text-gray-500">Created:</span>
+                    <br />
                     {formatDateTime(reservation.createdAt)}
                   </div>
                   <div>
-                    <span className="text-gray-500">Updated:</span><br />
+                    <span className="text-gray-500">Updated:</span>
+                    <br />
                     {formatDateTime(reservation.updatedAt)}
                   </div>
                   {reservation.cancelledAt && (
                     <div>
-                      <span className="text-gray-500">Cancelled:</span><br />
+                      <span className="text-gray-500">Cancelled:</span>
+                      <br />
                       {formatDateTime(reservation.cancelledAt)}
                     </div>
                   )}
@@ -448,18 +491,21 @@ const ReservationDetailsModal: React.FC<ReservationDetailsModalProps> = ({
       </Modal>
 
       {/* Refund Modal */}
-      <Modal 
-        ref={refundModalRef}
-        onClose={() => setShowRefundModal(false)}
-      >
+      <Modal ref={refundModalRef} onClose={() => setShowRefundModal(false)}>
         <div className="p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Process Refund</h3>
-          
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Process Refund
+          </h3>
+
           <div className="mb-4">
             <p className="text-sm text-gray-600 mb-2">
-              Original payment: {formatCurrency(reservation.payment.amount, reservation.payment.currency)}
+              Original payment:{" "}
+              {formatCurrency(
+                reservation.payment.amount,
+                reservation.payment.currency
+              )}
             </p>
-            
+
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Refund Amount
             </label>
@@ -477,14 +523,12 @@ const ReservationDetailsModal: React.FC<ReservationDetailsModalProps> = ({
 
           <div className="flex gap-3">
             <Button
-              
               onClick={() => setShowRefundModal(false)}
               className="flex-1"
             >
               Cancel
             </Button>
             <Button
-              
               onClick={handleRefund}
               disabled={!refundAmount || parseFloat(refundAmount) <= 0}
               className="flex-1"
