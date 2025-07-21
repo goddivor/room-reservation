@@ -8,6 +8,7 @@ export interface RoomTypeConfig {
   color: string;
   icon: string;
   isActive: boolean;
+   images?: string[]; 
   createdAt: string;
   updatedAt: string;
 }

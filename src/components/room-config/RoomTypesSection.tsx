@@ -2,12 +2,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // src/components/room-config/RoomTypesSection.tsx
 import React, { useState, useRef } from 'react';
-import { Add, Edit, Trash, Buildings2, TickCircle } from 'iconsax-react';
+import { Add, Edit, Trash, Buildings2, TickCircle, Gallery } from 'iconsax-react';
 import Button from '@/components/Button';
 import { Input } from '@/components/Input';
 import { Textarea } from '@/components/forms/Textarea';
 import Modal, { type ModalRef } from '@/components/ui/Modal';
 import ConfirmationModal from '@/components/modals/confirmation-modal';
+import ImageManagementModal from '@/components/room-config/ImageManagementModal';
 import { useToast } from '@/context/toast-context';
 import type { RoomTypeConfig, RoomTypeFormData } from '@/types/room-config.types';
 import type { ModalRef as ConfirmModalRef } from '@/types/modal-ref';
@@ -24,9 +25,11 @@ const RoomTypesSection: React.FC<RoomTypesSectionProps> = ({
   const toast = useToast();
   const formModalRef = useRef<ModalRef>(null);
   const deleteModalRef = useRef<ConfirmModalRef>(null);
+  const imageModalRef = useRef<ModalRef>(null);
   
   const [editingType, setEditingType] = useState<RoomTypeConfig | null>(null);
   const [typeToDelete, setTypeToDelete] = useState<RoomTypeConfig | null>(null);
+  const [typeForImages, setTypeForImages] = useState<RoomTypeConfig | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   
   const [formData, setFormData] = useState<RoomTypeFormData>({
@@ -87,6 +90,11 @@ const RoomTypesSection: React.FC<RoomTypesSectionProps> = ({
   const handleDelete = (roomType: RoomTypeConfig) => {
     setTypeToDelete(roomType);
     deleteModalRef.current?.open();
+  };
+
+  const handleManageImages = (roomType: RoomTypeConfig) => {
+    setTypeForImages(roomType);
+    imageModalRef.current?.open();
   };
 
   const handleToggleStatus = (roomType: RoomTypeConfig) => {
@@ -166,6 +174,7 @@ const RoomTypesSection: React.FC<RoomTypesSectionProps> = ({
         const newType: RoomTypeConfig = {
           id: `room_type_${Date.now()}`,
           ...formData,
+          images: [], // Initialize with empty images array
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
         };
@@ -208,6 +217,15 @@ const RoomTypesSection: React.FC<RoomTypesSectionProps> = ({
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: undefined }));
     }
+  };
+
+  const handleImagesUpdate = (roomTypeId: string, images: string[]) => {
+    const updatedTypes = roomTypes.map(type =>
+      type.id === roomTypeId
+        ? { ...type, images, updatedAt: new Date().toISOString() }
+        : type
+    );
+    onRoomTypesChange(updatedTypes);
   };
 
   return (
@@ -260,6 +278,11 @@ const RoomTypesSection: React.FC<RoomTypesSectionProps> = ({
                         Inactive
                       </span>
                     )}
+                    {roomType.images && roomType.images.length > 0 && (
+                      <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                        {roomType.images.length} image{roomType.images.length !== 1 ? 's' : ''}
+                      </span>
+                    )}
                   </div>
                   <p className="text-sm text-gray-600 mt-1">{roomType.description}</p>
                   <p className="text-xs text-gray-500 mt-1">
@@ -272,6 +295,14 @@ const RoomTypesSection: React.FC<RoomTypesSectionProps> = ({
               </div>
 
               <div className="flex items-center space-x-2">
+                <Button
+                  onClick={() => handleManageImages(roomType)}
+                  className="p-2 text-purple-600 hover:text-purple-800 hover:bg-purple-50 rounded-lg"
+                  title="Manage Images"
+                >
+                  <Gallery size={16} color="currentColor" />
+                </Button>
+
                 <Button
                   onClick={() => handleToggleStatus(roomType)}
                   className={`p-2 rounded-lg ${
@@ -465,6 +496,14 @@ const RoomTypesSection: React.FC<RoomTypesSectionProps> = ({
           </div>
         </form>
       </Modal>
+
+      {/* Image Management Modal */}
+      <ImageManagementModal
+        ref={imageModalRef}
+        roomType={typeForImages}
+        onImagesUpdate={handleImagesUpdate}
+        onClose={() => setTypeForImages(null)}
+      />
 
       {/* Delete Confirmation Modal */}
       <ConfirmationModal
