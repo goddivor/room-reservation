@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router";
 import RootLayout from "@/app.layout";
 import NotFound from "./notFound";
-import StarterPage from "./StarterPage";
+import LandingPage from "./landing";
 import { authRoutes } from "@/lib/routes/auth.routes";
 
 import { adminRoutes } from "@/lib/routes/admin.routes";
@@ -13,7 +13,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <StarterPage />,
+        element: <LandingPage />,
       },
       authRoutes,
       adminRoutes,

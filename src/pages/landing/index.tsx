@@ -1,6 +1,6 @@
 import React from 'react';
 
-const StarterPage: React.FC = () => {
+const LandingPage: React.FC = () => {
     return (
         <div>
             <h1>Welcome to the Room Reservation App</h1>
@@ -9,4 +9,4 @@ const StarterPage: React.FC = () => {
     );
 };
 
-export default StarterPage;
+export default LandingPage;
