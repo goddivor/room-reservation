@@ -112,7 +112,7 @@ const ConfirmationModal = forwardRef<ModalRef, ConfirmationModalProps>(
 
     return (
       <div
-        className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50 p-4 bg-black"
+        className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50 p-4 shadow-lg backdrop-blur-sm"
         onClick={handleBackdropClick}
       >
         <div className="bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 overflow-hidden">
