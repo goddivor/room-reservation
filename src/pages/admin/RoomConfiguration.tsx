@@ -7,7 +7,7 @@ import {
   Star1,
   Monitor
 } from 'iconsax-react';
-import RoomTypesSection from '@/components/room-config/RoomTypesSection';
+import RoomTypesSection from '@/components/room-config/RoomSection';
 import LocationsSection from '@/components/room-config/LocationsSection';
 import FeaturesSection from '@/components/room-config/FeaturesSection';
 import EquipmentSection from '@/components/room-config/EquipmentSection';
