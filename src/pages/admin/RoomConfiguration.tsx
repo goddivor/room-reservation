@@ -7,7 +7,6 @@ import {
   Star1,
   Monitor
 } from 'iconsax-react';
-import RoomTypesSection from '@/components/room-config/RoomSection';
 import LocationsSection from '@/components/room-config/LocationsSection';
 import FeaturesSection from '@/components/room-config/FeaturesSection';
 import EquipmentSection from '@/components/room-config/EquipmentSection';
@@ -18,6 +17,7 @@ import {
   mockFeatures, 
   mockLocations 
 } from '@/mocks/room-config.mocks';
+import RoomTypesSection from '@/components/room-config/RoomTypesSection';
 
 type ConfigSection = 'room-types' | 'locations' | 'features' | 'equipment';
 
