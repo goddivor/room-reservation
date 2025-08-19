@@ -1,19 +1,33 @@
 import React, { useState } from 'react';
 import { HambergerMenu, CloseSquare } from 'iconsax-react';
-import { Link } from 'react-router';
+import { Link, useNavigate, useLocation } from 'react-router';
 
 const Navbar: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
 
+    const handleMenuClick = (item: typeof menuItems[0]) => {
+        if (location.pathname === '/') {
+            // If on landing page, scroll to section
+            const element = document.querySelector(item.href);
+            element?.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            // If on another page, navigate to landing page with hash
+            navigate(`/${item.href}`);
+        }
+        setIsMenuOpen(false);
+    };
+
     const menuItems = [
-        { name: 'Home', href: '#home', active: true },
-        { name: 'Rooms', href: '#rooms' },
-        { name: 'About', href: '#about' },
-        { name: 'Contact', href: '#contact' }
+        { name: 'Home', href: '#home', route: '/', active: true },
+        { name: 'Rooms', href: '#rooms', route: '/' },
+        { name: 'About', href: '#about', route: '/' },
+        { name: 'Contact', href: '#contact', route: '/' }
     ];
 
     return (
@@ -31,9 +45,9 @@ const Navbar: React.FC = () => {
                     <div className="hidden md:block">
                         <div className="ml-10 flex items-baseline space-x-8">
                             {menuItems.map((item) => (
-                                <a
+                                <button
                                     key={item.name}
-                                    href={item.href}
+                                    onClick={() => handleMenuClick(item)}
                                     className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
                                         item.active
                                             ? 'text-blue-600 bg-blue-50'
@@ -41,7 +55,7 @@ const Navbar: React.FC = () => {
                                     }`}
                                 >
                                     {item.name}
-                                </a>
+                                </button>
                             ))}
                         </div>
                     </div>
@@ -76,18 +90,17 @@ const Navbar: React.FC = () => {
                 <div className="md:hidden bg-white border-t">
                     <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                         {menuItems.map((item) => (
-                            <a
+                            <button
                                 key={item.name}
-                                href={item.href}
-                                className={`block px-3 py-2 rounded-md text-base font-medium transition-all duration-300 ${
+                                onClick={() => handleMenuClick(item)}
+                                className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-all duration-300 ${
                                     item.active
                                         ? 'text-blue-600 bg-blue-50'
                                         : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
                                 }`}
-                                onClick={() => setIsMenuOpen(false)}
                             >
                                 {item.name}
-                            </a>
+                            </button>
                         ))}
                         <Link to="/auth/login">
                             <button className="w-full mt-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-2 px-6 rounded-full transition-all duration-300">
