@@ -3,6 +3,7 @@ import UserLayout from "@/components/layout/UserLayout";
 import UserDashboard from "@/pages/user/UserDashboard";
 import UserProfile from "@/pages/user/UserProfile";
 import UserReservations from "@/pages/user/UserReservations";
+import UserMessages from "@/pages/user/UserMessages";
 
 export const userRoutes: RouteObject = {
   path: "/user",
@@ -19,6 +20,10 @@ export const userRoutes: RouteObject = {
     {
       path: "reservations",
       element: <UserReservations />,
+    },
+    {
+      path: "messages",
+      element: <UserMessages />,
     },
   ],
 };
