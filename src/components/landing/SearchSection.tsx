@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router';
 import { Calendar, SearchNormal } from 'iconsax-react';
 
 const SearchSection: React.FC = () => {
+    const navigate = useNavigate();
     const [checkIn, setCheckIn] = useState<string>('');
     const [checkOut, setCheckOut] = useState<string>('');
 
@@ -16,8 +18,8 @@ const SearchSection: React.FC = () => {
             return;
         }
 
-        // Handle search logic here
-        console.log('Searching rooms from', checkIn, 'to', checkOut);
+        // Navigate to rooms page with dates as URL parameters
+        navigate(`/rooms?checkIn=${checkIn}&checkOut=${checkOut}`);
     };
 
     // Get today's date in YYYY-MM-DD format for min date
