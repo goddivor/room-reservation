@@ -10,6 +10,8 @@ export interface RoomTypeConfig {
   description: string;
   color: string;
   icon: string;
+  images?: string[];
+  bannerImage?: string;
   createdAt: string;
   updatedAt: string;
 }
