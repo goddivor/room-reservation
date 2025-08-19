@@ -3,8 +3,8 @@ import RootLayout from "@/app.layout";
 import NotFound from "./notFound";
 import LandingPage from "./landing";
 import { authRoutes } from "@/lib/routes/auth.routes";
-
 import { adminRoutes } from "@/lib/routes/admin.routes";
+import { userRoutes } from "@/lib/routes/user.routes";
 
 
 const router = createBrowserRouter([
@@ -17,6 +17,7 @@ const router = createBrowserRouter([
       },
       authRoutes,
       adminRoutes,
+      userRoutes,
       { path: "*", element: <NotFound /> },
     ],
   },
