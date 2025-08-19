@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { HambergerMenu, CloseSquare } from 'iconsax-react';
+import { Link } from 'react-router';
 
 const Navbar: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -47,9 +48,11 @@ const Navbar: React.FC = () => {
 
                     {/* Login Now Button */}
                     <div className="hidden md:block">
-                        <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-2 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
-                            Log Now
-                        </button>
+                        <Link to="/auth/login">
+                            <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-2 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
+                                Log Now
+                            </button>
+                        </Link>
                     </div>
 
                     {/* Mobile menu button */}
@@ -86,9 +89,11 @@ const Navbar: React.FC = () => {
                                 {item.name}
                             </a>
                         ))}
-                        <button className="w-full mt-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-2 px-6 rounded-full transition-all duration-300">
-                            Book Now
-                        </button>
+                        <Link to="/auth/login">
+                            <button className="w-full mt-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-2 px-6 rounded-full transition-all duration-300">
+                                Log Now
+                            </button>
+                        </Link>
                     </div>
                 </div>
             )}
