@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import { ArrowLeft, ArrowRight, Eye, Heart } from 'iconsax-react';
 
 interface Room {
@@ -62,6 +63,7 @@ const rooms: Room[] = [
 ];
 
 const RoomsSection: React.FC = () => {
+    const navigate = useNavigate();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
@@ -215,7 +217,10 @@ const RoomsSection: React.FC = () => {
 
                 {/* View All Button */}
                 <div className="text-center mt-12">
-                    <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    <button 
+                        onClick={() => navigate('/rooms')}
+                        className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg"
+                    >
                         View All Rooms
                     </button>
                 </div>
