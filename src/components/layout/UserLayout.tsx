@@ -10,6 +10,7 @@ import {
     Logout,
     ArrowDown2,
     Calendar,
+    Message,
 } from 'iconsax-react';
 
 interface SidebarItem {
@@ -44,6 +45,12 @@ const UserLayout: React.FC = () => {
             label: 'My Reservations',
             icon: <Calendar color="#1D4ED8" size={20} />,
             description: 'View & manage bookings'
+        },
+        {
+            path: '/user/messages',
+            label: 'Messages',
+            icon: <Message color="#1D4ED8" size={20} />,
+            description: 'Contact support'
         }
     ];
 
