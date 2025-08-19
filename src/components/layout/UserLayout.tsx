@@ -9,6 +9,7 @@ import {
     CloseSquare,
     Logout,
     ArrowDown2,
+    Calendar,
 } from 'iconsax-react';
 
 interface SidebarItem {
@@ -37,6 +38,12 @@ const UserLayout: React.FC = () => {
             label: 'Dashboard',
             icon: <Home color="#1D4ED8" size={20} />,
             description: 'Overview & stats'
+        },
+        {
+            path: '/user/reservations',
+            label: 'My Reservations',
+            icon: <Calendar color="#1D4ED8" size={20} />,
+            description: 'View & manage bookings'
         }
     ];
 
